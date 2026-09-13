@@ -1,0 +1,47 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="dev.tfvars.example" -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -var-file="dev.tfvars.example" -auto-approve tfplan
+
+      - name: Check application
+        run: |
+          docker ps
+          echo
+          echo "Checking application at localhost:9090..."
+
+          status=$(curl --silent --show-error \
+            --request GET \
+            --output response.json \
+            --write-out '%{http_code}' \
+            http://localhost:9090/users)
+
+          echo "HTTP status: $status"
+          jq . response.json
+
+          if [ "$status" != "200" ]; then
+            echo "Expected HTTP 200, got $status"
+            exit 1
+          fi

@@ -1,0 +1,5 @@
+postgres_user     = "labuser"
+postgres_password = "labpassword"
+postgres_db       = "labdb"
+
+nginx_port = 9090
