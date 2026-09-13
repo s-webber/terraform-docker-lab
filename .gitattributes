@@ -1,0 +1,28 @@
+# Treat these as text files and normalize line endings
+* text=auto eol=lf
+
+# Terraform / HCL
+*.tf text
+*.tfvars text
+*.hcl text
+
+# Docker / application configuration
+Dockerfile text
+*.dockerfile text
+*.conf text
+
+# Python
+*.py text
+
+# Shell scripts
+*.sh text
+
+# Markdown and documentation
+*.md text
+
+# GitHub / configuration files
+.gitattributes text
+.gitignore text
+*.yml text
+*.yaml text
+*.json text
